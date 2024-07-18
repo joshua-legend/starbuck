@@ -49,5 +49,4 @@ public class JwtUtil {
                 .getPayload(); // payload 줄게
     }
 
-
 }

@@ -1,6 +1,8 @@
 package com.example.starbucks;
 
 
+import com.example.starbucks.token.JwtFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 //spring mvc -> controller
 //spring jpa -> repository
@@ -16,6 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     // 패스워드 암호화 해주는 함수
     // qwer1234 -> abc!
@@ -35,10 +41,9 @@ public class SecurityConfig {
             .sessionManagement(x-> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 기반 안함
             .authorizeHttpRequests(x ->
                     x.requestMatchers("**").permitAll() // 누구든지 우리의 starbucks 모든 파일(**) 접근 가능(permitAll)
-                     .anyRequest().authenticated());  // 아무 request를 인증해야함
-        //atomic 패턴
-        //component -> atom / molecules / organism
-        //build 패턴
+                     .anyRequest().authenticated())// 아무 request를 인증해야함
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }

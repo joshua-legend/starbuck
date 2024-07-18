@@ -15,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("GET","POST","PUT","DELETE") // Https request 메소드 허용
                 .allowedHeaders("*") // request의 모든 header 허용
                 .exposedHeaders("Authorization") // 클라이언트가 Authorization은 볼수있게 해줌
-                .allowCredentials(true); // 클라 관련 메소드
+                .allowCredentials(true); // 클라이언트가 서버에 접속 or 자원에 접근을 허용하는 증명
+                //비밀번호 인증 or API KEY or Token or Cookie
     }
 }

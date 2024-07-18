@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,6 +61,13 @@ public class UserController {
             //response header
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Authorization", "Bearer " + token);
+
+            // 출입증 객체
+            Authentication authentication =  new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            // 출입관리부에 작성
+            // 카카오톡: 대화리스트화면[액티비티] + 상세친구대화톡방[액티비티]
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
 
             //response body
             ApiResponse apiResponse = new ApiResponse(ResponseStatus.SUCCESS, "로그인 성공 했음", null);
